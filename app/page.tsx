@@ -7,8 +7,7 @@ import { WebSearchSection } from "@/components/web-search-section"
 import { SocialMediaSection } from "@/components/social-media-section"
 import { AIInsightsSection } from "@/components/ai-insights-section"
 import { VoiceGenerationSection } from "@/components/voice-generation-section"
-import { IntegrationsSection } from "@/components/integrations-section"
-import { LinkedInPostsSection } from "@/components/linkedin-posts-section"
+import { CalendarAgentSection } from "@/components/calendar-agent-section"
 import { ThemeProvider } from "@/components/theme-provider"
 import { useState, useEffect } from "react"
 
@@ -36,10 +35,8 @@ export default function Home() {
         return <AIInsightsSection />
       case "/voice-generation":
         return <VoiceGenerationSection />
-      case "/linkedin-posts":
-        return <LinkedInPostsSection />
-      case "/integrations":
-        return <IntegrationsSection />
+      case "/calendar-agent":
+        return <CalendarAgentSection />
       default:
         return <Dashboard />
     }

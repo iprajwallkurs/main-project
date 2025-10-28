@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { Search, Globe, Users, BarChart3, Mic, Home, Zap, Linkedin } from "lucide-react"
+import { Search, Globe, Users, BarChart3, Mic, Home, Calendar } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 const navigationItems = [
@@ -40,14 +40,9 @@ const navigationItems = [
     url: "/voice-generation",
   },
   {
-    title: "LinkedIn Posts",
-    icon: Linkedin,
-    url: "/linkedin-posts",
-  },
-  {
-    title: "Integrations",
-    icon: Zap,
-    url: "/integrations",
+    title: "Calendar Agent",
+    icon: Calendar,
+    url: "/calendar-agent",
   },
 ]
 
@@ -74,13 +69,10 @@ export function AppSidebar() {
                 asChild
                 className="h-12 rounded-xl transition-all duration-200 hover:bg-accent/50 data-[state=open]:bg-accent"
               >
-                <button
-                  onClick={() => (window.location.hash = item.url)}
-                  className="flex items-center gap-3 px-4 w-full text-left"
-                >
+                <a href={`#${item.url}`} className="flex items-center gap-3 px-4 w-full">
                   <item.icon className="h-5 w-5" />
                   <span className="font-medium">{item.title}</span>
-                </button>
+                </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
