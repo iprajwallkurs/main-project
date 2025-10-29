@@ -55,7 +55,7 @@ export function AppSidebar() {
             <Globe className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold tracking-tight">Brainfog</h1>
+            <h1 className="text-xl font-semibold tracking-tight">NEXA</h1>
             <p className="text-sm text-muted-foreground">AI Content Platform</p>
           </div>
         </div>
@@ -85,7 +85,7 @@ export function AppSidebar() {
             <div className="h-8 w-8 rounded-full bg-gradient-to-br from-green-400 to-blue-500" />
             <div className="text-sm">
               <p className="font-medium">Admin User</p>
-              <p className="text-muted-foreground">admin@brainfog.ai</p>
+              <p className="text-muted-foreground">admin@nexa.ai</p>
             </div>
           </div>
           <ThemeToggle />

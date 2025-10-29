@@ -250,7 +250,7 @@ export function IntegrationsSection() {
                           description: "View basic information about public channels",
                           enabled: true,
                         },
-                        { scope: "chat:write", description: "Send messages as Brainfog", enabled: true },
+                        { scope: "chat:write", description: "Send messages as NEXA", enabled: true },
                         { scope: "files:write", description: "Upload files and content", enabled: true },
                         { scope: "users:read", description: "View people in the workspace", enabled: false },
                       ].map((permission, index) => (
@@ -275,7 +275,7 @@ export function IntegrationsSection() {
                         <Label htmlFor="test-channel">Test Channel</Label>
                         <select className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
                           <option>#general</option>
-                          <option>#brainfog-notifications</option>
+                          <option>#nexa-notifications</option>
                           <option>#tech-updates</option>
                         </select>
                       </div>
@@ -286,7 +286,7 @@ export function IntegrationsSection() {
                           id="test-message"
                           placeholder="Enter a test message..."
                           className="rounded-xl"
-                          defaultValue="🤖 Brainfog integration test - AI content curation is now active!"
+                          defaultValue="🤖 NEXA integration test - AI content curation is now active!"
                         />
                       </div>
 
@@ -402,21 +402,21 @@ export function IntegrationsSection() {
                   {[
                     {
                       name: "Content Generated",
-                      url: "https://api.brainfog.ai/webhooks/content",
+                      url: "https://api.nexa.ai/webhooks/content",
                       method: "POST",
                       status: "active",
                       events: ["content.created", "content.updated"],
                     },
                     {
                       name: "Podcast Published",
-                      url: "https://api.brainfog.ai/webhooks/podcast",
+                      url: "https://api.nexa.ai/webhooks/podcast",
                       method: "POST",
                       status: "active",
                       events: ["podcast.generated", "podcast.published"],
                     },
                     {
                       name: "Analytics Update",
-                      url: "https://api.brainfog.ai/webhooks/analytics",
+                      url: "https://api.nexa.ai/webhooks/analytics",
                       method: "POST",
                       status: "paused",
                       events: ["analytics.daily", "analytics.weekly"],

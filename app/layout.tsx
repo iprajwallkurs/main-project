@@ -6,7 +6,7 @@ import './globals.css'
 import Starfield from '@/components/Starfield'
 
 export const metadata: Metadata = {
-  title: 'Brainfog',
+  title: 'NEXA',
   description: 'Created by team 4',
   generator: 'team 04',
 }

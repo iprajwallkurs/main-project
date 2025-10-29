@@ -1,4 +1,4 @@
-# Brainfog Platform
+# NEXA Platform
 
 A Next.js app with a luxurious, tile-style dashboard, live space background, transparent headers, and free data sources (Reddit + Hacker News) for trending content. Includes AI utilities (cohost Q&A/outline), web search, and voice generation.
 
