@@ -1,5 +1,50 @@
 import { NextResponse } from "next/server"
 
+// Optional Reddit OAuth (script app). If the following env vars are set
+// REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USERNAME, REDDIT_PASSWORD
+// then the server will use the OAuth password grant to get an access token
+// and call the OAuth endpoints (oauth.reddit.com). This is more reliable
+// than scraping the public JSON endpoint and avoids 403 blocks.
+
+const REDDIT_CLIENT_ID = process.env.REDDIT_CLIENT_ID
+const REDDIT_CLIENT_SECRET = process.env.REDDIT_CLIENT_SECRET
+const REDDIT_USERNAME = process.env.REDDIT_USERNAME
+const REDDIT_PASSWORD = process.env.REDDIT_PASSWORD
+
+let _redditToken: { token: string; expiresAt: number } | null = null
+
+async function getRedditToken(): Promise<string | null> {
+  if (!_redditToken) {
+    // no token cached
+  } else if (Date.now() < _redditToken.expiresAt - 1000) {
+    return _redditToken.token
+  }
+  if (!REDDIT_CLIENT_ID || !REDDIT_CLIENT_SECRET || !REDDIT_USERNAME || !REDDIT_PASSWORD) {
+    return null
+  }
+
+  const basic = Buffer.from(`${REDDIT_CLIENT_ID}:${REDDIT_CLIENT_SECRET}`).toString("base64")
+  try {
+    const resp = await fetch("https://www.reddit.com/api/v1/access_token", {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${basic}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": "nexa/1.0 (by /u/your-reddit-username)",
+      },
+      body: `grant_type=password&username=${encodeURIComponent(REDDIT_USERNAME)}&password=${encodeURIComponent(REDDIT_PASSWORD)}`,
+    })
+    if (!resp.ok) return null
+    const data = await resp.json().catch(() => null)
+    if (!data?.access_token) return null
+    const expiresIn = typeof data.expires_in === "number" ? data.expires_in : 3600
+    _redditToken = { token: data.access_token, expiresAt: Date.now() + expiresIn * 1000 }
+    return _redditToken.token
+  } catch (err) {
+    return null
+  }
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url)
   const q = (url.searchParams.get("q") || "").trim()
@@ -9,10 +54,25 @@ export async function GET(req: Request) {
 
   try {
     const limit = Math.max(max, 25)
-    const base = `https://www.reddit.com/search.json?q=${encodeURIComponent(q)}&limit=${limit}&sort=new`
-    const resp = await fetch(base, {
-      headers: { "User-Agent": "Mozilla/5.0" },
-    })
+
+    // Prefer OAuth-backed Reddit API if credentials are available
+    let resp: Response | null = null
+    const token = await getRedditToken()
+    if (token) {
+      try {
+        resp = await fetch(`https://oauth.reddit.com/search?q=${encodeURIComponent(q)}&limit=${limit}&sort=new`, {
+          headers: { Authorization: `Bearer ${token}`, "User-Agent": "nexa/1.0 (by /u/your-reddit-username)" },
+        })
+      } catch (e) {
+        resp = null
+      }
+    }
+
+    // Fallback to public JSON endpoint when OAuth not configured or failed
+    if (!resp) {
+      const base = `https://www.reddit.com/search.json?q=${encodeURIComponent(q)}&limit=${limit}&sort=new`
+      resp = await fetch(base, { headers: { "User-Agent": "Mozilla/5.0" } })
+    }
 
     // If Reddit returns a non-OK status or non-JSON body, handle gracefully
     const contentType = resp.headers.get("content-type") || ""
