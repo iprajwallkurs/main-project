@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server"
 
+// Toggle demo/free fallback mode. Set FREE_FALLBACK to "false" to disable demo
+// items and return empty results instead.
+const FREE_FALLBACK = process.env.FREE_FALLBACK !== "false"
+
 export async function GET(req: Request) {
   const url = new URL(req.url)
   const q = (url.searchParams.get("q") || "").trim()
@@ -21,13 +25,16 @@ export async function GET(req: Request) {
       source: "Hacker News",
       thumbnail: undefined,
     }))
-    // If HN returned no items, provide a small demo fallback so the UI remains useful.
+    // If HN returned no items, optionally provide a small demo fallback so the UI remains useful.
     if (!items || items.length === 0) {
-      const demo = [
-      { title: "Show HN: Sleek - AI mobile app mockup generator", link: "https://sleek.design", source: "Hacker News" },
-      { title: "Show HN: Tiny CI improvements for fast feedback", link: "https://example.com/ci", source: "Hacker News" },
-      ]
-      return NextResponse.json({ items: demo, note: "Demo results (free mode)." })
+      if (FREE_FALLBACK) {
+        const demo = [
+          { title: "Show HN: Sleek - AI mobile app mockup generator", link: "https://sleek.design", source: "Hacker News" },
+          { title: "Show HN: Tiny CI improvements for fast feedback", link: "https://example.com/ci", source: "Hacker News" },
+        ]
+        return NextResponse.json({ items: demo, note: "Demo results (free mode)." })
+      }
+      return NextResponse.json({ items: [], note: "No HN results available." })
     }
 
     return NextResponse.json({ items })

@@ -15,6 +15,10 @@ const REDDIT_PASSWORD = process.env.REDDIT_PASSWORD
 // environment (for CI), it will be used here; otherwise a fallback is used.
 const DEPLOYED_BUILD = process.env.DEPLOYED_BUILD || "2025-10-30T00:00:00Z"
 
+// Toggle demo/free fallback mode. Set FREE_FALLBACK to "false" to disable demo
+// items and return empty results instead.
+const FREE_FALLBACK = process.env.FREE_FALLBACK !== "false"
+
 function jsonWithBuild(body: any, init?: { status?: number; headers?: Record<string, string> }) {
   const status = init?.status ?? 200
   // Use a plain Response with explicit headers so the header is always emitted
@@ -126,10 +130,13 @@ export async function GET(req: Request) {
           source: "r/reactjs",
         },
       ]
-      return jsonWithBuild(
-        { items: demo, note: `Reddit responded with status ${resp.status}. Showing demo results (free mode).` },
-        { status: 200 },
-      )
+      if (FREE_FALLBACK) {
+        return jsonWithBuild(
+          { items: demo, note: `Reddit responded with status ${resp.status}. Showing demo results (free mode).` },
+          { status: 200 },
+        )
+      }
+      return jsonWithBuild({ items: [], note: `Reddit responded with status ${resp.status}. Results unavailable.` }, { status: 200 })
     }
     if (!contentType.includes("application/json")) {
       // Non-JSON response (likely an HTML block page). Return demo results so UI stays useful.
@@ -147,10 +154,13 @@ export async function GET(req: Request) {
           source: "r/reactjs",
         },
       ]
-      return jsonWithBuild(
-        { items: demo, note: `Reddit returned non-JSON response. Showing demo results (free mode).` },
-        { status: 200 },
-      )
+      if (FREE_FALLBACK) {
+        return jsonWithBuild(
+          { items: demo, note: `Reddit returned non-JSON response. Showing demo results (free mode).` },
+          { status: 200 },
+        )
+      }
+      return jsonWithBuild({ items: [], note: `Reddit returned non-JSON response. Results unavailable.` }, { status: 200 })
     }
 
     let data: any
@@ -202,7 +212,10 @@ export async function GET(req: Request) {
           source: "r/reactjs",
         },
       ]
-      return jsonWithBuild({ items: demo, note: "Demo results (free mode). Add Reddit OAuth credentials in Vercel to get live results." })
+      if (FREE_FALLBACK) {
+        return jsonWithBuild({ items: demo, note: "Demo results (free mode). Add Reddit OAuth credentials in Vercel to get live results." })
+      }
+      return jsonWithBuild({ items: [], note: "No Reddit results available." })
     }
 
     return jsonWithBuild({ items })
