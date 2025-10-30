@@ -89,10 +89,21 @@ export async function GET(req: Request) {
       try {
         resp = await fetch(base, { headers: { "User-Agent": "Mozilla/5.0" } })
       } catch (err) {
-        return NextResponse.json(
-          { items: [], note: `Network error contacting Reddit. Results unavailable.` },
-          { status: 200 },
-        )
+        const demo = [
+          {
+            title: "Show HN: Building tiny AI assistants – examples and templates",
+            link: "https://www.reddit.com/r/inews/comments/example1",
+            thumbnail: undefined,
+            source: "r/technology",
+          },
+          {
+            title: "Discussion: Best practices for Next.js app routing",
+            link: "https://www.reddit.com/r/reactjs/comments/example2",
+            thumbnail: undefined,
+            source: "r/reactjs",
+          },
+        ]
+        return jsonWithBuild({ items: demo, note: `Network error contacting Reddit. Showing demo results (free mode).` }, { status: 200 })
       }
     }
 
