@@ -55,7 +55,8 @@ export function SocialMediaSection() {
         const data = await rr.json()
         const items = Array.isArray(data.items) ? data.items : []
         setReddit(items)
-        if (items.length === 0) setRedditError("No Reddit posts found for this query.")
+        // If backend provided a note (e.g., blocked by Reddit), surface it to the user.
+        if (items.length === 0) setRedditError(data.note || "No Reddit posts found for this query.")
       }
     } finally {
       setRedditLoading(false)
@@ -69,7 +70,7 @@ export function SocialMediaSection() {
         const data = await rh.json()
         const items = Array.isArray(data.items) ? data.items : []
         setHn(items)
-        if (items.length === 0) setHnError("No HN stories found for this query.")
+        if (items.length === 0) setHnError(data.note || "No HN stories found for this query.")
       }
     } finally {
       setHnLoading(false)
