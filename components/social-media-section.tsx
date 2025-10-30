@@ -135,7 +135,7 @@ export function SocialMediaSection() {
               <CardTitle className="text-xl">Reddit</CardTitle>
             </CardHeader>
             <CardContent>
-              {reddit.length > 0 && (
+                {reddit.length > 0 && (
                 <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2">
                   {reddit.map((r, i) => (
                     <a key={i} href={r.link} target="_blank" rel="noreferrer" className="snap-start min-w-[280px] max-w-[320px] rounded-xl overflow-hidden border border-border/40 hover:bg-muted/30">
@@ -149,7 +149,11 @@ export function SocialMediaSection() {
                 </div>
               )}
               {reddit.length === 0 && (
-                <p className="text-sm text-muted-foreground">{_redditError || "No Reddit posts yet. Showing row for demo consistency."}</p>
+                <div>
+                  {(_redditError && (
+                    <p className="text-sm text-yellow-600 mb-2">{_redditError}</p>
+                  )) || <p className="text-sm text-muted-foreground">No Reddit posts yet. Showing row for demo consistency.</p>}
+                </div>
               )}
             </CardContent>
           </Card>
@@ -172,7 +176,11 @@ export function SocialMediaSection() {
                 </div>
               )}
               {hn.length === 0 && (
-                <p className="text-sm text-muted-foreground">No HN stories yet. Showing row for demo consistency.</p>
+                <div>
+                  {(_hnError && (
+                    <p className="text-sm text-yellow-600 mb-2">{_hnError}</p>
+                  )) || <p className="text-sm text-muted-foreground">No HN stories yet. Showing row for demo consistency.</p>}
+                </div>
               )}
             </CardContent>
           </Card>
