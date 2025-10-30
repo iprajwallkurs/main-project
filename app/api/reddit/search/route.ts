@@ -13,7 +13,26 @@ export async function GET(req: Request) {
     const resp = await fetch(base, {
       headers: { "User-Agent": "Mozilla/5.0" },
     })
-    const data = await resp.json()
+
+    // If Reddit returns a non-OK status or non-JSON body, handle gracefully
+    const contentType = resp.headers.get("content-type") || ""
+    const text = await resp.text()
+    if (!resp.ok) {
+      const snippet = text.slice(0, 512)
+      return NextResponse.json({ error: `Reddit responded with status ${resp.status}: ${snippet}` }, { status: 502 })
+    }
+    if (!contentType.includes("application/json")) {
+      const snippet = text.slice(0, 512)
+      return NextResponse.json({ error: `Reddit returned non-JSON response: ${snippet}` }, { status: 502 })
+    }
+
+    let data: any
+    try {
+      data = JSON.parse(text)
+    } catch (err: any) {
+      const snippet = text.slice(0, 512)
+      return NextResponse.json({ error: `Failed to parse Reddit JSON: ${err?.message || String(err)} - snippet: ${snippet}` }, { status: 502 })
+    }
     const now = Math.floor(Date.now() / 1000)
     const cutoff = now - 60 * 60 * 24 * days
     const all = (data?.data?.children || [])
