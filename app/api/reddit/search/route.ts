@@ -100,16 +100,44 @@ export async function GET(req: Request) {
     const contentType = resp.headers.get("content-type") || ""
     const text = await resp.text()
     if (!resp.ok) {
-      // Reddit blocked or returned an error page (HTML). Return an empty result instead
+      // Reddit blocked or returned an error page (HTML). Return demo results so the UI stays useful.
+      const demo = [
+        {
+          title: "Show HN: Building tiny AI assistants – examples and templates",
+          link: "https://www.reddit.com/r/inews/comments/example1",
+          thumbnail: undefined,
+          source: "r/technology",
+        },
+        {
+          title: "Discussion: Best practices for Next.js app routing",
+          link: "https://www.reddit.com/r/reactjs/comments/example2",
+          thumbnail: undefined,
+          source: "r/reactjs",
+        },
+      ]
       return jsonWithBuild(
-        { items: [], note: `Reddit responded with status ${resp.status}. Results unavailable.` },
+        { items: demo, note: `Reddit responded with status ${resp.status}. Showing demo results (free mode).` },
         { status: 200 },
       )
     }
     if (!contentType.includes("application/json")) {
-      // Non-JSON response (likely an HTML block page). Return empty results so UI stays stable.
+      // Non-JSON response (likely an HTML block page). Return demo results so UI stays useful.
+      const demo = [
+        {
+          title: "Show HN: Building tiny AI assistants – examples and templates",
+          link: "https://www.reddit.com/r/inews/comments/example1",
+          thumbnail: undefined,
+          source: "r/technology",
+        },
+        {
+          title: "Discussion: Best practices for Next.js app routing",
+          link: "https://www.reddit.com/r/reactjs/comments/example2",
+          thumbnail: undefined,
+          source: "r/reactjs",
+        },
+      ]
       return jsonWithBuild(
-        { items: [], note: `Reddit returned non-JSON response. Results unavailable.` },
+        { items: demo, note: `Reddit returned non-JSON response. Showing demo results (free mode).` },
         { status: 200 },
       )
     }
