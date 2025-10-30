@@ -11,6 +11,16 @@ const REDDIT_CLIENT_SECRET = process.env.REDDIT_CLIENT_SECRET
 const REDDIT_USERNAME = process.env.REDDIT_USERNAME
 const REDDIT_PASSWORD = process.env.REDDIT_PASSWORD
 
+// Marker used in `app/layout.tsx`. If you set DEPLOYED_BUILD in your
+// environment (for CI), it will be used here; otherwise a fallback is used.
+const DEPLOYED_BUILD = process.env.DEPLOYED_BUILD || "2025-10-30T00:00:00Z"
+
+function jsonWithBuild(body: any, init?: { status?: number; headers?: Record<string, string> }) {
+  const status = init?.status ?? 200
+  const headers = { ...(init?.headers || {}), "X-Deployed-Build": DEPLOYED_BUILD }
+  return NextResponse.json(body, { status, headers })
+}
+
 let _redditToken: { token: string; expiresAt: number } | null = null
 
 async function getRedditToken(): Promise<string | null> {
@@ -50,7 +60,7 @@ export async function GET(req: Request) {
   const q = (url.searchParams.get("q") || "").trim()
   const max = Math.min(parseInt(url.searchParams.get("max") || "9", 10), 30)
   const days = Math.min(Math.max(parseInt(url.searchParams.get("days") || "1", 10) || 1, 1), 30)
-  if (!q) return NextResponse.json({ error: "Missing q" }, { status: 400 })
+  if (!q) return jsonWithBuild({ error: "Missing q" }, { status: 400 })
 
   try {
     const limit = Math.max(max, 25)
@@ -88,14 +98,14 @@ export async function GET(req: Request) {
     const text = await resp.text()
     if (!resp.ok) {
       // Reddit blocked or returned an error page (HTML). Return an empty result instead
-      return NextResponse.json(
+      return jsonWithBuild(
         { items: [], note: `Reddit responded with status ${resp.status}. Results unavailable.` },
         { status: 200 },
       )
     }
     if (!contentType.includes("application/json")) {
       // Non-JSON response (likely an HTML block page). Return empty results so UI stays stable.
-      return NextResponse.json(
+      return jsonWithBuild(
         { items: [], note: `Reddit returned non-JSON response. Results unavailable.` },
         { status: 200 },
       )
@@ -105,7 +115,7 @@ export async function GET(req: Request) {
     try {
       data = JSON.parse(text)
     } catch (err: any) {
-      return NextResponse.json(
+      return jsonWithBuild(
         { items: [], note: `Failed to parse Reddit JSON. Results unavailable.` },
         { status: 200 },
       )
@@ -133,7 +143,7 @@ export async function GET(req: Request) {
         }
       })
       .slice(0, max)
-    return NextResponse.json({ items })
+    return jsonWithBuild({ items })
   } catch (e: any) {
     // Log for observability, but return a safe 200 with an explanatory note
     // so the frontend doesn't receive a 5xx and can render a friendly message.
@@ -141,7 +151,7 @@ export async function GET(req: Request) {
       // eslint-disable-next-line no-console
       console.error("/api/reddit/search error:", e)
     } catch (_) {}
-    return NextResponse.json(
+    return jsonWithBuild(
       { items: [], note: `Reddit search failed: ${e?.message || "unknown error"}` },
       { status: 200 },
     )
