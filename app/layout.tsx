@@ -17,6 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
+      <head>
+        {/* SSR-visible marker so we can verify deployments via curl */}
+        <meta name="x-deployed-build" content="2025-10-30T00:00:00Z" />
+      </head>
       <body className="h-full font-sans antialiased bg-background text-foreground">
         {/* Live layers */}
         <div className="live-gradient" aria-hidden="true" />
