@@ -1,9 +1,11 @@
 import type { NextRequest } from 'next/server'
 
 export async function GET(_req: NextRequest) {
+  const now = new Date().toISOString()
   const payload = {
     deployed: true,
-    marker: 'deploy-check-2025-10-30T00:00:00Z',
+    marker: `deploy-check-${now}`,
+    timestamp: now,
     note: 'This response is SSR from /deploy-check and proves the latest main was deployed.',
   }
 
