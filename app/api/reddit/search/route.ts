@@ -17,8 +17,11 @@ const DEPLOYED_BUILD = process.env.DEPLOYED_BUILD || "2025-10-30T00:00:00Z"
 
 function jsonWithBuild(body: any, init?: { status?: number; headers?: Record<string, string> }) {
   const status = init?.status ?? 200
-  const headers = { ...(init?.headers || {}), "X-Deployed-Build": DEPLOYED_BUILD }
-  return NextResponse.json(body, { status, headers })
+  // Use a plain Response with explicit headers so the header is always emitted
+  const headers = new Headers(init?.headers || {})
+  headers.set("X-Deployed-Build", DEPLOYED_BUILD)
+  headers.set("Content-Type", "application/json")
+  return new Response(JSON.stringify(body), { status, headers })
 }
 
 let _redditToken: { token: string; expiresAt: number } | null = null
