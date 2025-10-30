@@ -33,6 +33,8 @@ export default function RootLayout({
           {children}
         </div>
         <Analytics />
+        {/* SSR-visible body marker for deployment verification */}
+        <div id="deployed-build" data-deployed-build="2025-10-30T00:00:00Z" style={{display: 'none'}} />
       </body>
     </html>
   )
