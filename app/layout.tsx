@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   generator: 'team 04',
 }
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
