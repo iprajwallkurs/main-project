@@ -94,7 +94,9 @@ Fact Cards:\n${(facts || [])
       })
       const data = await resp.json()
       if (data?.response) return NextResponse.json({ outline: data.response })
-    } catch (_) {}
+    } catch {
+      // ignore local Ollama errors
+    }
 
     return NextResponse.json(
       { error: "No LLM configured. Set OPENROUTER_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY, or run Ollama locally." },

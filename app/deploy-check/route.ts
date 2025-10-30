@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server'
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   const now = new Date().toISOString()
   const payload = {
     deployed: true,

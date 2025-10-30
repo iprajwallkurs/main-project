@@ -153,7 +153,9 @@ export async function POST(req: Request) {
       })
       const data = await resp.json()
       if (data?.response) return NextResponse.json({ answer: data.response, sources: items })
-    } catch (_) {}
+    } catch {
+      // ignore provider-specific error
+    }
 
     // Extractive fallback: stitched answer with links
     const stitched = items

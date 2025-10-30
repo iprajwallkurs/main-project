@@ -145,7 +145,9 @@ export async function POST(req: Request) {
       })
       const data = await resp.json()
       if (data?.response) return NextResponse.json({ summary: data.response, sources: items })
-    } catch (_) {}
+    } catch {
+      // ignore Ollama instance errors
+    }
 
     // Extractive fallback (no keys): stitch snippets and provide citations
     const stitched = items

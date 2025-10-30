@@ -95,7 +95,7 @@ export async function GET(req: Request) {
           if (!items.some((it) => it.link === v.link)) items.push(v)
         }
         if (items.length >= max) break
-      } catch (_) {
+      } catch {
         // try next instance
       }
     }
@@ -139,7 +139,9 @@ export async function GET(req: Request) {
           if (score(v.title) < 1) continue
           if (!items.some((it) => it.link === v.link)) items.push(v)
         }
-      } catch (_) {}
+      } catch {
+        // ignore dailymotion fallback errors
+      }
     }
 
     if (items.length === 0) {
@@ -212,7 +214,7 @@ export async function GET(req: Request) {
             if (items.length >= 1) {
               return NextResponse.json({ items, note: "trending_fallback" })
             }
-          } catch (_) {
+          } catch {
             // try next
           }
         }

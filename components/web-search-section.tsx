@@ -3,10 +3,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 // Removed unused UI controls and icons to reduce lint noise
 // Badge, Switch, Label, CardDescription, and many icons were unused
-import { Globe } from "lucide-react"
 import { useEffect, useState } from "react"
 
 export function WebSearchSection() {
