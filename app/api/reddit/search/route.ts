@@ -68,10 +68,19 @@ export async function GET(req: Request) {
       }
     }
 
-    // Fallback to public JSON endpoint when OAuth not configured or failed
+    // Fallback to public JSON endpoint when OAuth not configured or failed.
+    // Wrap the fetch in a try/catch so transient network errors don't bubble
+    // up and cause a 500 — instead return a safe empty result with a note.
     if (!resp) {
       const base = `https://www.reddit.com/search.json?q=${encodeURIComponent(q)}&limit=${limit}&sort=new`
-      resp = await fetch(base, { headers: { "User-Agent": "Mozilla/5.0" } })
+      try {
+        resp = await fetch(base, { headers: { "User-Agent": "Mozilla/5.0" } })
+      } catch (err) {
+        return NextResponse.json(
+          { items: [], note: `Network error contacting Reddit. Results unavailable.` },
+          { status: 200 },
+        )
+      }
     }
 
     // If Reddit returns a non-OK status or non-JSON body, handle gracefully
