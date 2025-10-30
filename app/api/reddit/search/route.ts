@@ -18,20 +18,28 @@ export async function GET(req: Request) {
     const contentType = resp.headers.get("content-type") || ""
     const text = await resp.text()
     if (!resp.ok) {
-      const snippet = text.slice(0, 512)
-      return NextResponse.json({ error: `Reddit responded with status ${resp.status}: ${snippet}` }, { status: 502 })
+      // Reddit blocked or returned an error page (HTML). Return an empty result instead
+      return NextResponse.json(
+        { items: [], note: `Reddit responded with status ${resp.status}. Results unavailable.` },
+        { status: 200 },
+      )
     }
     if (!contentType.includes("application/json")) {
-      const snippet = text.slice(0, 512)
-      return NextResponse.json({ error: `Reddit returned non-JSON response: ${snippet}` }, { status: 502 })
+      // Non-JSON response (likely an HTML block page). Return empty results so UI stays stable.
+      return NextResponse.json(
+        { items: [], note: `Reddit returned non-JSON response. Results unavailable.` },
+        { status: 200 },
+      )
     }
 
     let data: any
     try {
       data = JSON.parse(text)
     } catch (err: any) {
-      const snippet = text.slice(0, 512)
-      return NextResponse.json({ error: `Failed to parse Reddit JSON: ${err?.message || String(err)} - snippet: ${snippet}` }, { status: 502 })
+      return NextResponse.json(
+        { items: [], note: `Failed to parse Reddit JSON. Results unavailable.` },
+        { status: 200 },
+      )
     }
     const now = Math.floor(Date.now() / 1000)
     const cutoff = now - 60 * 60 * 24 * days
