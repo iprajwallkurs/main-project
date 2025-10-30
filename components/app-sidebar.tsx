@@ -13,7 +13,7 @@ import {
 import { Search, Globe, Users, BarChart3, Mic, Home, Calendar } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 
-const navigationItems = [
+export const navigationItems = [
   {
     title: "Dashboard",
     icon: Home,
