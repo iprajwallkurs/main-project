@@ -146,6 +146,26 @@ export async function GET(req: Request) {
         }
       })
       .slice(0, max)
+    // If Reddit is blocked or returned no items, provide a small free/demo
+    // fallback so the UI remains useful without OAuth credentials.
+    if (!items || items.length === 0) {
+      const demo = [
+        {
+          title: "Show HN: Building tiny AI assistants – examples and templates",
+          link: "https://www.reddit.com/r/inews/comments/example1",
+          thumbnail: undefined,
+          source: "r/technology",
+        },
+        {
+          title: "Discussion: Best practices for Next.js app routing",
+          link: "https://www.reddit.com/r/reactjs/comments/example2",
+          thumbnail: undefined,
+          source: "r/reactjs",
+        },
+      ]
+      return jsonWithBuild({ items: demo, note: "Demo results (free mode). Add Reddit OAuth credentials in Vercel to get live results." })
+    }
+
     return jsonWithBuild({ items })
   } catch (e: any) {
     // Log for observability, but return a safe 200 with an explanatory note

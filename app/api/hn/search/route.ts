@@ -21,6 +21,15 @@ export async function GET(req: Request) {
       source: "Hacker News",
       thumbnail: undefined,
     }))
+    // If HN returned no items, provide a small demo fallback so the UI remains useful.
+    if (!items || items.length === 0) {
+      const demo = [
+      { title: "Show HN: Sleek - AI mobile app mockup generator", link: "https://sleek.design", source: "Hacker News" },
+      { title: "Show HN: Tiny CI improvements for fast feedback", link: "https://example.com/ci", source: "Hacker News" },
+      ]
+      return NextResponse.json({ items: demo, note: "Demo results (free mode)." })
+    }
+
     return NextResponse.json({ items })
   } catch (e: any) {
     return NextResponse.json({ error: e?.message || "HN search failed" }, { status: 500 })

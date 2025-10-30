@@ -53,10 +53,10 @@ export function SocialMediaSection() {
         setRedditError(err.error || `Reddit search failed (status ${rr.status})`)
       } else {
         const data = await rr.json()
-        const items = Array.isArray(data.items) ? data.items : []
-        setReddit(items)
-        // If backend provided a note (e.g., blocked by Reddit), surface it to the user.
-        if (items.length === 0) setRedditError(data.note || "No Reddit posts found for this query.")
+  const items = Array.isArray(data.items) ? data.items : []
+  setReddit(items)
+  // Surface any backend note (e.g., blocked by Reddit or demo mode).
+  setRedditError(data.note || "")
       }
     } finally {
       setRedditLoading(false)
@@ -68,9 +68,9 @@ export function SocialMediaSection() {
         setHnError(err.error || `HN search failed (status ${rh.status})`)
       } else {
         const data = await rh.json()
-        const items = Array.isArray(data.items) ? data.items : []
-        setHn(items)
-        if (items.length === 0) setHnError(data.note || "No HN stories found for this query.")
+  const items = Array.isArray(data.items) ? data.items : []
+  setHn(items)
+  setHnError(data.note || "")
       }
     } finally {
       setHnLoading(false)
