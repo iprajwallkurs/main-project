@@ -4,10 +4,10 @@ export async function GET() {
     deployed: true,
     marker,
     timestamp: new Date().toISOString(),
-    note: "public verification route — no auth required"
+    note: "public verification route — no auth required",
   }
-
-  return new Response(JSON.stringify(body), {
-    headers: { "Content-Type": "application/json" },
-  })
+  const DEPLOYED_BUILD = process.env.DEPLOYED_BUILD || "2025-10-30T00:00:00Z"
+  const headers = new Headers({ "Content-Type": "application/json" })
+  headers.set("X-Deployed-Build", DEPLOYED_BUILD)
+  return new Response(JSON.stringify(body), { status: 200, headers })
 }
