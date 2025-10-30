@@ -11,7 +11,7 @@ export function CalendarAgentSection() {
       <header className="border-transparent bg-transparent supports-[backdrop-filter]:bg-transparent">
         <div className="flex h-16 items-center justify-between px-8">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-balance">Calendar Agent</h1>
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground">Calendar Agent</h1>
             <p className="text-sm text-muted-foreground">Talk to the AI agent for calendar help</p>
           </div>
         </div>
@@ -24,7 +24,7 @@ export function CalendarAgentSection() {
               <CardTitle className="text-lg">Talk to the AI Agent</CardTitle>
             </CardHeader>
             <CardContent className="flex items-center justify-center">
-              <a href={url} target="_blank" rel="noopener noreferrer">
+              <a href={url} target="_blank" rel="noopener noreferrer" aria-label="Open Calendar Agent in new tab">
                 <Button className="rounded-xl px-6 py-3">Talk to the AI agent</Button>
               </a>
             </CardContent>
@@ -34,3 +34,5 @@ export function CalendarAgentSection() {
     </div>
   )
 }
+
+export default CalendarAgentSection
