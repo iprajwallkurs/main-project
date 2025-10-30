@@ -52,7 +52,7 @@ export default function Home() {
         <div className="flex min-h-screen w-full">
           <div className="md:hidden fixed top-0 left-0 right-0 z-20 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="flex h-14 items-center px-4">
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="-ml-2">
                     <Menu className="h-5 w-5" />
