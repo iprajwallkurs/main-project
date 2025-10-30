@@ -55,6 +55,17 @@ A Next.js app with a luxurious, tile-style dashboard, live space background, tra
 - Example variables live in `.env.example` only.
 - No analytics or tracking added beyond `@vercel/analytics` (if configured).
 
+## Vercel Analytics
+
+This project includes `@vercel/analytics` and renders the `<Analytics />` component in
+`app/layout.tsx`. To enable collection of metrics for your deployments:
+
+- Deploy or redeploy the project on Vercel (the analytics script collects data from Vercel-hosted deployments).
+- In the Vercel dashboard, go to Project → Settings → Analytics and enable Vercel Analytics for this project.
+- Wait for the deployment to finish and allow a few minutes for metrics to appear in the Vercel Analytics view.
+
+Note: local `npm run dev` sessions won't populate the Vercel analytics dashboard — analytics are collected from Vercel deployments.
+
 ## Troubleshooting
 
 - See old UI after edits

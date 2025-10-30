@@ -1,27 +1,15 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
+// badge/progress removed (unused)
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import {
-  BarChart3,
-  TrendingUp,
-  TrendingDown,
-  Brain,
-  Target,
-  Zap,
-  Eye,
-  ArrowRight,
   Filter,
   Download,
   RefreshCw,
-  Lightbulb,
-  PieChart,
-  Activity,
 } from "lucide-react"
 import { useState } from "react"
 

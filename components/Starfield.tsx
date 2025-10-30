@@ -80,12 +80,10 @@ export default function Starfield() {
       ctx.globalCompositeOperation = "source-over"
     }
 
-    let last = 0
     const loop = (now: number) => {
       if (!prefersReduced) {
         draw(now)
       }
-      last = now
       animRef.current = requestAnimationFrame(loop)
     }
 
