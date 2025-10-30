@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
+// Removed unused Geist font imports (clean up lint warnings)
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import Starfield from '@/components/Starfield'
