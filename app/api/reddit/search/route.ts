@@ -135,6 +135,15 @@ export async function GET(req: Request) {
       .slice(0, max)
     return NextResponse.json({ items })
   } catch (e: any) {
-    return NextResponse.json({ error: e?.message || "Reddit search failed" }, { status: 500 })
+    // Log for observability, but return a safe 200 with an explanatory note
+    // so the frontend doesn't receive a 5xx and can render a friendly message.
+    try {
+      // eslint-disable-next-line no-console
+      console.error("/api/reddit/search error:", e)
+    } catch (_) {}
+    return NextResponse.json(
+      { items: [], note: `Reddit search failed: ${e?.message || "unknown error"}` },
+      { status: 200 },
+    )
   }
 }
