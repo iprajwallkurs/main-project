@@ -7,14 +7,14 @@ export function SocialMediaSection() {
   const [videoQuery, setVideoQuery] = useState("")
   const [videos, setVideos] = useState<Array<{ title: string; link: string; thumbnail?: string; source?: string; date?: string }>>([])
   const [loadingVid, setLoadingVid] = useState(false)
-  const [videoError, setVideoError] = useState<string>("")
+  const [_videoError, setVideoError] = useState<string>("")
   
   const [reddit, setReddit] = useState<Array<{ title: string; link: string; thumbnail?: string; source?: string }>>([])
-  const [redditLoading, setRedditLoading] = useState(false)
-  const [redditError, setRedditError] = useState<string>("")
+  const [_redditLoading, setRedditLoading] = useState(false)
+  const [_redditError, setRedditError] = useState<string>("")
   const [hn, setHn] = useState<Array<{ title: string; link: string; thumbnail?: string; source?: string }>>([])
-  const [hnLoading, setHnLoading] = useState(false)
-  const [hnError, setHnError] = useState<string>("")
+  const [_hnLoading, setHnLoading] = useState(false)
+  const [_hnError, setHnError] = useState<string>("")
 
   const searchVideos = async () => {
     if (!videoQuery.trim()) return
@@ -148,7 +148,7 @@ export function SocialMediaSection() {
                 </div>
               )}
               {reddit.length === 0 && (
-                <p className="text-sm text-muted-foreground">No Reddit posts yet. Showing row for demo consistency.</p>
+                <p className="text-sm text-muted-foreground">{_redditError || "No Reddit posts yet. Showing row for demo consistency."}</p>
               )}
             </CardContent>
           </Card>
